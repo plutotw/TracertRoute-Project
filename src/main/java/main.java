@@ -6,17 +6,8 @@ import java.net.UnknownHostException;
  */
 public class main {
     public static void main(String[] args) {
-/*        TracertRoute route=new TracertRoute();
+        TracertRoute route=new TracertRoute();
         Thread t=new Thread(route);
-        t.start();*/
-        InetAddress dstIP= null;
-        try {
-            dstIP = InetAddress.getByName("baidu.com");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        JsonRootBean json=HttpRequest.sendGet(dstIP);
-        if (json!=null)System.out.println(json.getStatus());
-        else System.out.println("n");
+        t.start();
     }
 }

@@ -14,9 +14,9 @@ public class TracertRoute implements Runnable{
         /**
          * 初始化
          */
-        device=NetworkTools.openDevice(2);
-        captor=NetworkTools.getCaptor();
-        srcIP=NetworkTools.getLocalIp(1,device);
+        device=NetworkTools.getInterfaceList()[2];
+        captor=NetworkTools.openDevice(device);
+        srcIP=NetworkTools.getLocalIp(device);
         dstIP=NetworkTools.getUrlIp("baidu.com");
         srcMAC=NetworkTools.getLocalMac(device);
         //dstMAC=NetworkTools.getGatewayMac();

@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class NetworkTools {
-    static JpcapCaptor captor;
 
     /**
      * 获取网卡列表
@@ -19,28 +18,28 @@ public class NetworkTools {
 
     /**
      * 打开设备接收数据包
-     * @param devNo
+     * @param device
      * @return
      */
-    public static NetworkInterface openDevice(int devNo){
-        NetworkInterface device=getInterfaceList()[devNo];
+    public static JpcapCaptor openDevice(NetworkInterface device){
+        JpcapCaptor captor = null;
         try {
             captor = JpcapCaptor.openDevice( device, 2000,  false,  1 );
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return device;
+        return captor;
     }
 
     /**
      * 返回指定网卡的ip地址
-     * @param devNO
+     * @param device
      * @return
      */
-    public static InetAddress getLocalIp(int devNO,NetworkInterface device){
+    public static InetAddress getLocalIp(NetworkInterface device){
         if(device==null)return null;
         InetAddress localIP=null;
-        localIP=device.addresses[devNO].address;
+        localIP=device.addresses[1].address; //1为IPV4地址
         return localIP;
     }
 
@@ -77,7 +76,4 @@ public class NetworkTools {
         return Gateway;
     }
 
-    public static JpcapCaptor getCaptor() {
-        return captor;
-    }
 }
