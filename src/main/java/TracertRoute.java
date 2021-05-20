@@ -19,25 +19,25 @@ public class TracertRoute implements Runnable{
         srcIP=NetworkTools.getLocalIp(device);
         dstIP=NetworkTools.getUrlIp("baidu.com");
         srcMAC=NetworkTools.getLocalMac(device);
-        //dstMAC=NetworkTools.getGatewayMac();
-        dstMAC=new byte[]{(byte) 0xec,(byte) 0x26,(byte) 0xca,(byte) 0x3b,(byte) 0x08,(byte) 0xc8};
+        dstMAC=NetworkTools.getGatewayMac("baidu.com");
         /**
          *
          */
         ICMP icmp = new ICMP();
         short ttl=0;
         boolean flag=Boolean.TRUE;
+        long cur,pre;
         while (flag) {
             ttl++;
+            System.out.println("----------");
+            System.out.println("ttl:"+ttl);
             ICMPPacket icmpPacket = icmp.createICMP(ttl, srcIP, dstIP, srcMAC, dstMAC);
+            cur=System.nanoTime();
             icmp.sendICMP(icmpPacket, captor, device);
             ICMPPacket icmpPacket1=icmp.revICMP(captor);
-            if (icmpPacket1==null)
-                System.out.println("请求超时");
-            else{
-                System.out.println(icmpPacket1.src_ip+"->"+icmpPacket1.dst_ip);
-            }
-            if (icmpPacket1!=null&&icmpPacket1.type==0)flag=Boolean.FALSE;
+            pre=System.nanoTime();
+            System.out.println((pre-cur)/1000000+"ms");
+            flag=icmp.parseICMP(icmpPacket1);
         }
         System.out.println("success!");
     }

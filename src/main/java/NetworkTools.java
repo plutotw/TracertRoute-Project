@@ -1,8 +1,11 @@
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
+import jpcap.packet.EthernetPacket;
+import jpcap.packet.IPPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class NetworkTools {
@@ -71,9 +74,37 @@ public class NetworkTools {
      * 获取网关MAC地址
      * @return
      */
-    public static byte[] getGatewayMac(){
-        byte[] Gateway=new byte[]{(byte) 0xff,(byte) 0xff,(byte) 0xff,(byte) 0xff,(byte) 0xff,(byte) 0xff};
-        return Gateway;
+    public static byte[] getGatewayMac(String url){
+        byte[] Mac=null;
+        NetworkInterface dev=NetworkTools.getInterfaceList()[2];
+        JpcapCaptor captor=NetworkTools.openDevice(dev);
+        try {
+            int counter=0;
+            String dstIP=InetAddress.getByName(url).getHostAddress().toString();
+            captor.setFilter("tcp",true);
+            Socket socket=new Socket(url,80);
+            socket.close();
+            while (true){
+                IPPacket ip=(IPPacket) captor.getPacket();
+                if (ip==null){
+                    if (counter>3){
+                        System.out.println("获取网关MAC地址超时");
+                        break;
+                    }
+                    Thread.sleep(1000);
+                    counter++;
+                }
+                else if (!dstIP.equals(ip.src_ip.getHostAddress())){
+                    Mac=((EthernetPacket)ip.datalink).dst_mac;
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return Mac;
     }
 
 }

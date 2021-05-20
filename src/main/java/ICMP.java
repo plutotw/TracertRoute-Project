@@ -66,7 +66,7 @@ public class ICMP {
                 if(p==null){
                     if (counter>3)break;
                     counter++;
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     continue;
                 }else if (p.type==11){
                     break;
@@ -86,7 +86,17 @@ public class ICMP {
      * 解析一个ICMP数据包
      * @param icmp
      */
-    public void parseICMP(ICMPPacket icmp){
-
+    public boolean parseICMP(ICMPPacket icmp){
+        if (icmp==null) {
+            System.out.println("请求超时");
+        }
+        else if(icmp.type==11){
+            System.out.println(icmp.src_ip+"->"+icmp.dst_ip);
+        }
+        else if (icmp.type==0){
+            System.out.println(icmp.src_ip+"->"+icmp.dst_ip);
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 }
