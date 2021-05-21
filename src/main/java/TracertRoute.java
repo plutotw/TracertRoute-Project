@@ -16,7 +16,13 @@ public class TracertRoute implements Runnable, ActionListener {
     GUI gui;
     ICMP icmp;
     int devNo;
+    short ttl=0;
+    boolean flag=Boolean.TRUE;
+    long cur,pre,delay;
 
+    /**
+     * 构造函数
+     */
     public TracertRoute() {
         gui=new GUI();
         gui.Button.addActionListener(this);
@@ -24,6 +30,9 @@ public class TracertRoute implements Runnable, ActionListener {
         icmp = new ICMP();
     }
 
+    /**
+     * 线程，用于启动路由跟踪程序
+     */
     @Override
     public void run() {
         init();
@@ -45,13 +54,10 @@ public class TracertRoute implements Runnable, ActionListener {
         gui.setUrl("Target host:"+dstIP.getHostAddress());
     }
 
+    /**
+     *开始tracertroute
+     */
     public void Tracert(){
-        /**
-         *开始tracertroute
-         */
-        short ttl=0;
-        boolean flag=Boolean.TRUE;
-        long cur,pre,delay;
         while (flag) {
             ttl++;
             System.out.println("----------");
@@ -62,21 +68,7 @@ public class TracertRoute implements Runnable, ActionListener {
             ICMPPacket icmpPacket1=icmp.revICMP(captor);
             pre=System.nanoTime();
             delay=(pre-cur)/1000000;
-            if (icmpPacket1!=null){
-                String city="",isp="";
-                JsonRootBean json=HttpRequest.sendGet(icmpPacket1.src_ip.toString());
-                if (json!=null){
-                    isp=json.getIsp();
-                    if (json.getCity()==null){
-                        city="Local area network";
-                    }else city=json.getCity();
-                }
-                Object[] obj={ttl,delay,icmpPacket1.src_ip.getHostAddress(),city,isp};
-                gui.addRow(obj);
-            }else {
-                Object[] obj={ttl,"*","null","null","null"};
-                gui.addRow(obj);
-            }
+            setTable(icmpPacket1);
             flag=icmp.parseICMP(icmpPacket1);
         }
         JOptionPane.showMessageDialog(null, "路由追踪完成!");
@@ -88,6 +80,29 @@ public class TracertRoute implements Runnable, ActionListener {
         if (e.getSource()== gui.Button){
             Thread thread=new Thread(this);
             thread.start();
+        }
+    }
+
+    /**
+     * 将
+     * @param icmpPacket
+     */
+    public void setTable(ICMPPacket icmpPacket){
+        if (icmpPacket!=null){
+            String city="",isp="";
+            JsonRootBean json=HttpRequest.sendGet(icmpPacket.src_ip.toString());
+            if (json!=null){
+                isp=json.getIsp();
+                if (json.getCity()==null){
+                    city="Local area network";
+                }else
+                    city=json.getCity();
+            }
+            Object[] obj={ttl,delay,icmpPacket.src_ip.getHostAddress(),city,isp};
+            gui.addRow(obj);
+        }else {
+            Object[] obj={ttl,"*","*","*",""};
+            gui.addRow(obj);
         }
     }
 }
