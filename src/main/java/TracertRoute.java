@@ -84,21 +84,26 @@ public class TracertRoute implements Runnable, ActionListener {
     }
 
     /**
-     * 将
+     * 将数据展示到界面上
      * @param icmpPacket
      */
     public void setTable(ICMPPacket icmpPacket){
         if (icmpPacket!=null){
-            String city="",isp="";
+            String city="",isp="",country="",regionName="";
             JsonRootBean json=HttpRequest.sendGet(icmpPacket.src_ip.toString());
             if (json!=null){
                 isp=json.getIsp();
-                if (json.getCity()==null){
-                    city="Local area network";
-                }else
+                if (json.getCountry()==null)
+                    city="局域网";
+                else{
+                    regionName=json.getRegionName();
                     city=json.getCity();
+                    country=json.getCountry();
+                }
+
             }
-            Object[] obj={ttl,delay,icmpPacket.src_ip.getHostAddress(),city,isp};
+            Object[] obj={ttl,delay,icmpPacket.src_ip.getHostAddress(),
+                    country+" "+regionName+" "+city,isp};
             gui.addRow(obj);
         }else {
             Object[] obj={ttl,"*","*","*",""};

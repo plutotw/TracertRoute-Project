@@ -27,7 +27,7 @@ public class GUI extends Frame {
         Panel.setSize(450,450);
         add(Panel);
 
-        textField=new TextField("baidu.com");
+        textField=new TextField("github.com");
         textField.setBounds(5,0,150,30);
         textField.setFont(new Font("微软雅黑",0,15));
         Panel.add(textField);
@@ -37,7 +37,7 @@ public class GUI extends Frame {
         Panel.add(Button);
 
         cmb=new JComboBox();
-        cmb.setBounds(265,0,320,30);
+        cmb.setBounds(265,0,340,30);
         Panel.add(cmb);
 
         label=new Label("Target host:");
@@ -51,7 +51,7 @@ public class GUI extends Frame {
         tableModel.addColumn("ttl");
         tableModel.addColumn("time(ms)");
         tableModel.addColumn("ip");
-        tableModel.addColumn("city");
+        tableModel.addColumn("position");
         tableModel.addColumn("isp");
 
         JScrollPane scroll = new JScrollPane(table);
