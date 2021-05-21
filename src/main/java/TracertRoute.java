@@ -93,7 +93,7 @@ public class TracertRoute implements Runnable, ActionListener {
             JsonRootBean json=HttpRequest.sendGet(icmpPacket.src_ip.toString());
             if (json!=null){
                 isp=json.getIsp();
-                if (json.getCountry()==null)
+                if (json.getCity()==null)
                     city="局域网";
                 else{
                     regionName=json.getRegionName();
