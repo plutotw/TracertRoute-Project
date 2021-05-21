@@ -1,3 +1,5 @@
+import jpcap.NetworkInterface;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -10,6 +12,7 @@ public class GUI extends Frame {
     DefaultTableModel tableModel;
     Button Button;
     TextField textField;
+    JComboBox cmb;
     Label label;
     String url;
 
@@ -25,33 +28,39 @@ public class GUI extends Frame {
         add(Panel);
 
         textField=new TextField("baidu.com");
-        textField.setBounds(5,0,200,30);
+        textField.setBounds(5,0,150,30);
+        textField.setFont(new Font("微软雅黑",0,15));
         Panel.add(textField);
 
         Button=new Button("tracert");
-        Button.setBounds(205,0,100,30);
+        Button.setBounds(155,0,100,30);
         Panel.add(Button);
+
+        cmb=new JComboBox();
+        cmb.setBounds(265,0,320,30);
+        Panel.add(cmb);
 
         label=new Label("Target host:");
         label.setBounds(5,30,200,30);
+        label.setFont(new Font("微软雅黑",0,15));
         Panel.add(label);
 
         table=new JTable();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tableModel=(DefaultTableModel)table.getModel();
         tableModel.addColumn("ttl");
-        tableModel.addColumn("time");
+        tableModel.addColumn("time(ms)");
         tableModel.addColumn("ip");
         tableModel.addColumn("city");
+        tableModel.addColumn("isp");
 
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setBounds(5,70,450,400);
+        scroll.setBounds(5,70,600,400);
         Panel.add(scroll);
-
 
         this.setTitle("Tracert-Route");
         this.setVisible(true);
-        this.setSize(475,500);
+        this.setSize(625,510);
     }
 
 
@@ -62,7 +71,20 @@ public class GUI extends Frame {
     public void setProperties(){
         for (int i=0;i<tableModel.getColumnCount();i++){
             TableColumn column=table.getColumnModel().getColumn(i);
-            column.setPreferredWidth(112);
+            column.setPreferredWidth(120);
+        }
+
+        String lookAndFeel = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
+        try {
+            UIManager.setLookAndFeel(lookAndFeel);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
         }
     }
 
@@ -73,5 +95,15 @@ public class GUI extends Frame {
 
     public void setUrl(String s) {
         label.setText(s);
+    }
+
+    public void setNetwork(NetworkInterface[] list){
+        for (int i=0;i<list.length;i++){
+            cmb.addItem(list[i].description+list[i].addresses[1].address);
+        }
+    }
+
+    public int getNetwork(){
+        return cmb.getSelectedIndex();
     }
 }

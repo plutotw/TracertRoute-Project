@@ -2,6 +2,7 @@ import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 import jpcap.packet.ICMPPacket;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -14,10 +15,12 @@ public class TracertRoute implements Runnable, ActionListener {
     String url;
     GUI gui;
     ICMP icmp;
+    int devNo;
 
     public TracertRoute() {
         gui=new GUI();
         gui.Button.addActionListener(this);
+        gui.setNetwork(NetworkTools.getInterfaceList());
         icmp = new ICMP();
     }
 
@@ -31,8 +34,9 @@ public class TracertRoute implements Runnable, ActionListener {
      * 初始化
      */
     public void init(){
+        devNo= gui.getNetwork();
         url=gui.getUrl();
-        device=NetworkTools.getInterfaceList()[2];
+        device=NetworkTools.getInterfaceList()[devNo];
         captor=NetworkTools.openDevice(device);
         srcIP=NetworkTools.getLocalIp(device);
         dstIP=NetworkTools.getUrlIp(url);
@@ -59,19 +63,23 @@ public class TracertRoute implements Runnable, ActionListener {
             pre=System.nanoTime();
             delay=(pre-cur)/1000000;
             if (icmpPacket1!=null){
-                String city;
+                String city="",isp="";
                 JsonRootBean json=HttpRequest.sendGet(icmpPacket1.src_ip.toString());
-                if (json.getCity()==null){
-                    city="LAN Network";
-                }else city=json.getCity();
-                Object[] obj={ttl,delay,icmpPacket1.src_ip.getHostAddress(),city};
+                if (json!=null){
+                    isp=json.getIsp();
+                    if (json.getCity()==null){
+                        city="Local area network";
+                    }else city=json.getCity();
+                }
+                Object[] obj={ttl,delay,icmpPacket1.src_ip.getHostAddress(),city,isp};
                 gui.addRow(obj);
             }else {
-                Object[] obj={ttl,"*","null","null"};
+                Object[] obj={ttl,"*","null","null","null"};
                 gui.addRow(obj);
             }
             flag=icmp.parseICMP(icmpPacket1);
         }
+        JOptionPane.showMessageDialog(null, "路由追踪完成!");
         System.out.println("success!");
     }
 

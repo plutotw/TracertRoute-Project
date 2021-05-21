@@ -10,7 +10,7 @@ public class HttpRequest {
     public static JsonRootBean sendGet(String ip){
         String ipInformation="";
         try{
-            ipInformation= OkHttps.sync("http://ip-api.com/json"+ip).get().getBody().toString();
+            ipInformation= OkHttps.sync("http://ip-api.com/json"+ip+"?lang=zh-CN").get().getBody().toString();
         }
         catch (Exception e){
             e.printStackTrace();
