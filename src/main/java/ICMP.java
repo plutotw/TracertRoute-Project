@@ -64,9 +64,9 @@ public class ICMP {
             while(true){
                 p = (ICMPPacket)captor.getPacket ();
                 if(p==null){
-                    if (counter>3)break;
+                    if (counter>100)break;
                     counter++;
-                    Thread.sleep(500);
+                    Thread.sleep(10);
                     continue;
                 }else if (p.type==11){
                     break;
@@ -91,10 +91,10 @@ public class ICMP {
             System.out.println("请求超时");
         }
         else if(icmp.type==11){
-            System.out.println(icmp.src_ip+"->"+icmp.dst_ip);
+            System.out.println(icmp.src_ip.getHostAddress()+"->"+icmp.dst_ip.getHostAddress());
         }
         else if (icmp.type==0){
-            System.out.println(icmp.src_ip+"->"+icmp.dst_ip);
+            System.out.println(icmp.src_ip.getHostAddress()+"->"+icmp.dst_ip.getHostAddress());
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
