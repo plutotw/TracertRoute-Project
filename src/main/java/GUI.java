@@ -71,7 +71,7 @@ public class GUI extends Frame {
         return url;
     }
 
-    public void setLabel(String s) {
+    public void setUrl(String s) {
         label.setText(s);
     }
 }
