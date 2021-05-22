@@ -50,7 +50,7 @@ public class TracertRoute implements Runnable, ActionListener {
         srcIP=NetworkTools.getLocalIp(device);
         dstIP=NetworkTools.getUrlIp(url);
         srcMAC=NetworkTools.getLocalMac(device);
-        dstMAC=NetworkTools.getGatewayMac(url);
+        dstMAC=NetworkTools.getGatewayMac(url,device);
         gui.setUrl("Target host:"+dstIP.getHostAddress());
     }
 
