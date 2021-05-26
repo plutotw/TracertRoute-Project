@@ -1,42 +1,48 @@
 import jpcap.NetworkInterface;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 
 
 public class GUI extends Frame {
-    Panel Panel;
+    JPanel Panel;
     JTable table;
     DefaultTableModel tableModel;
-    Button Button,Button2;
-    TextField textField;
+    JButton Button,Button2;
+    JTextField textField;
     JComboBox cmb;
-    Label label;
+    JLabel label;
     String url;
 
     public GUI(){
+        try {
+            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         init();
         setProperties();
     }
 
     public void init(){
-        Panel=new Panel();
+        Panel= new JPanel();
         Panel.setLayout(null);
         Panel.setSize(450,450);
         add(Panel);
 
-        textField=new TextField("github.com");
+        textField= new JTextField("github.com");
         textField.setBounds(5,0,150,30);
         textField.setFont(new Font("微软雅黑",0,15));
         Panel.add(textField);
 
-        Button=new Button("tracert");
+        Button= new JButton("tracert");
         Button.setBounds(155,0,80,30);
         Panel.add(Button);
 
-        Button2=new Button("reset");
+        Button2= new JButton("reset");
         Button2.setBounds(240,0,80,30);
         Panel.add(Button2);
 
@@ -44,7 +50,7 @@ public class GUI extends Frame {
         cmb.setBounds(330,0,270,30);
         Panel.add(cmb);
 
-        label=new Label("Target host:");
+        label= new JLabel("Target host:");
         label.setBounds(5,30,200,30);
         label.setFont(new Font("微软雅黑",0,15));
         Panel.add(label);
@@ -80,19 +86,6 @@ public class GUI extends Frame {
         for (int i=0;i<tableModel.getColumnCount();i++){
             TableColumn column=table.getColumnModel().getColumn(i);
             column.setPreferredWidth(120);
-        }
-
-        String lookAndFeel = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
-        try {
-            UIManager.setLookAndFeel(lookAndFeel);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
         }
     }
 
