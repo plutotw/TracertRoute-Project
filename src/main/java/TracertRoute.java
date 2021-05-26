@@ -16,8 +16,8 @@ public class TracertRoute implements Runnable, ActionListener {
     GUI gui;
     ICMP icmp;
     int devNo;
-    short ttl=0;
-    boolean flag=Boolean.TRUE;
+    short ttl;
+    boolean flag;
     long cur,pre,delay;
 
     /**
@@ -26,6 +26,7 @@ public class TracertRoute implements Runnable, ActionListener {
     public TracertRoute() {
         gui=new GUI();
         gui.Button.addActionListener(this);
+        gui.Button2.addActionListener(this);
         gui.setNetwork(NetworkTools.getInterfaceList());
         icmp = new ICMP();
     }
@@ -43,6 +44,8 @@ public class TracertRoute implements Runnable, ActionListener {
      * 初始化
      */
     public void init(){
+        ttl=0;
+        flag=Boolean.TRUE;
         devNo= gui.getNetwork();
         url=gui.getUrl();
         device=NetworkTools.getInterfaceList()[devNo];
@@ -80,6 +83,9 @@ public class TracertRoute implements Runnable, ActionListener {
         if (e.getSource()== gui.Button){
             Thread thread=new Thread(this);
             thread.start();
+        }
+        if (e.getSource()==gui.Button2){
+            gui.delRow();
         }
     }
 

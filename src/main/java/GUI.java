@@ -10,7 +10,7 @@ public class GUI extends Frame {
     Panel Panel;
     JTable table;
     DefaultTableModel tableModel;
-    Button Button;
+    Button Button,Button2;
     TextField textField;
     JComboBox cmb;
     Label label;
@@ -33,11 +33,15 @@ public class GUI extends Frame {
         Panel.add(textField);
 
         Button=new Button("tracert");
-        Button.setBounds(155,0,100,30);
+        Button.setBounds(155,0,80,30);
         Panel.add(Button);
 
+        Button2=new Button("reset");
+        Button2.setBounds(240,0,80,30);
+        Panel.add(Button2);
+
         cmb=new JComboBox();
-        cmb.setBounds(265,0,340,30);
+        cmb.setBounds(330,0,270,30);
         Panel.add(cmb);
 
         label=new Label("Target host:");
@@ -66,6 +70,10 @@ public class GUI extends Frame {
 
     public void addRow(Object[] obj){
         tableModel.addRow(obj);
+    }
+
+    public void delRow(){
+        tableModel.setRowCount(0);
     }
 
     public void setProperties(){
