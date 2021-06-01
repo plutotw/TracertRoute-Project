@@ -76,6 +76,7 @@ public class TracertRoute implements Runnable, ActionListener {
         }
         JOptionPane.showMessageDialog(null, "路由追踪完成!");
         System.out.println("success!");
+        NetworkTools.closeDevice(captor);
     }
 
     @Override

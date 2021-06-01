@@ -36,6 +36,14 @@ public class NetworkTools {
     }
 
     /**
+     * 关闭设备
+     * @param captor
+     */
+    public static void closeDevice(JpcapCaptor captor){
+        captor.close();
+    }
+
+    /**
      * 返回指定网卡的ip地址
      * @param device
      * @return
