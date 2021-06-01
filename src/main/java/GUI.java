@@ -51,7 +51,7 @@ public class GUI extends Frame {
         Panel.add(cmb);
 
         label= new JLabel("Target host:");
-        label.setBounds(5,30,200,30);
+        label.setBounds(10,30,200,30);
         label.setFont(new Font("微软雅黑",0,15));
         Panel.add(label);
 
