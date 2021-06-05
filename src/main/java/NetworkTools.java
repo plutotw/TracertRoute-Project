@@ -65,6 +65,7 @@ public class NetworkTools {
         try {
             ip=InetAddress.getByName(url);
         } catch (UnknownHostException e) {
+            JOptionPane.showMessageDialog(null, "非法域名，请重新输入!");
             e.printStackTrace();
         }
         return ip;

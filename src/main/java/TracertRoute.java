@@ -65,17 +65,23 @@ public class TracertRoute implements Runnable, ActionListener {
             ttl++;
             System.out.println("----------");
             System.out.println("ttl:"+ttl);
+            //创建一个ICMP数据包
             ICMPPacket icmpPacket = icmp.createICMP(ttl, srcIP, dstIP, srcMAC, dstMAC);
+            //记录发送数据包的系统时间
             cur=System.nanoTime();
             icmp.sendICMP(icmpPacket, captor, device);
             ICMPPacket icmpPacket1=icmp.revICMP(captor);
+            //记录接受到数据包的系统时间
             pre=System.nanoTime();
+            //计算时延
             delay=(pre-cur)/1000000;
+            //设置信息到界面
             setTable(icmpPacket1);
             flag=icmp.parseICMP(icmpPacket1);
         }
         JOptionPane.showMessageDialog(null, "路由追踪完成!");
         System.out.println("success!");
+        //关闭设备
         NetworkTools.closeDevice(captor);
     }
 
